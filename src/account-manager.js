@@ -28,6 +28,9 @@ export class AccountManager {
       refreshToken: acct.refreshToken || null,
       expiresAt: acct.expiresAt || null,
       status: 'active',
+      // No quota is known at startup, so start probing: the first response for
+      // an account reveals its weekly limit and triggers re-evaluation.
+      probing: true,
       quota: emptyQuota(),
       usage: {
         totalInputTokens: 0,
@@ -373,6 +376,8 @@ export class AccountManager {
       refreshToken: acctData.refreshToken || null,
       expiresAt: acctData.expiresAt || null,
       status: 'active',
+      // Unknown quota until the first response — probe it like startup accounts.
+      probing: true,
       quota: emptyQuota(),
       usage: { totalInputTokens: 0, totalOutputTokens: 0, totalRequests: 0, lastUsed: null },
       rateLimitedUntil: null,
